@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout";
-import { fetchSingleCocktail } from "../Redux/features/cocktailSlice";
+import { fetchSingleCocktails } from "../Redux/features/cocktailSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import Spinner from "../Components/Spinner";
-
+import SpinnerAnim from "../Components/shared/SpinnerAnim";
 const ProductDetails = () => {
   const [modifiedCocktail, setModifiedCocktail] = useState([]);
 
@@ -13,7 +12,7 @@ const ProductDetails = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    dispatch(fetchSingleCocktail({ id }));
+    dispatch(fetchSingleCocktails({ id }));
   }, [dispatch, id]);
   useEffect(() => {
     if (cocktail.length > 0) {
@@ -48,7 +47,7 @@ const ProductDetails = () => {
       <>
         <Layout>
           {loading ? (
-            <Spinner />
+            <SpinnerAnim />
           ) : (
             <div className="container mt-4">
               <Link to="/" className="go-back">
@@ -56,7 +55,7 @@ const ProductDetails = () => {
               </Link>
               <div className="row text-center">
                 <div className="col-md-5">
-                  <img className="img-fluid w-50" src={img} alt={name} />
+                  <img className="img-fluid w-50 mt-5" src={img} alt={name} />
                 </div>
                 <div className="col-md-5">
                   <h3> Name: {name} </h3>

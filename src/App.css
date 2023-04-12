@@ -4,9 +4,15 @@
     width: max-content;
     padding: 0.2rem 0.4rem;
 }
+.homepage{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .content-container{
     min-height: 75vh;
 }
+
 .go-back{
     background-color: red;
     color: white;

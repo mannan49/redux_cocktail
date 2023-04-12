@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import Layout from "./../Components/Layout";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import Layout from "../Components/Layout";
-import Spinner from "../Components/Spinner";
 import { fetchCocktails } from "../Redux/features/cocktailSlice";
+import SpinnerAnim from "../Components/shared/SpinnerAnim";
+import { Link } from "react-router-dom";
+import "../App.css";
 
 const HomePage = () => {
-  const [modifiedCocktails, setModifiedCocktails] = useState([]);
+  const [modifiedCocktails, setmodifiedCocktails] = useState([]);
   const { loading, cocktails, error } = useSelector((state) => ({
     ...state.app,
   }));
@@ -14,47 +15,45 @@ const HomePage = () => {
   useEffect(() => {
     dispatch(fetchCocktails());
   }, []);
-  // This useEffect is for updating key names of APIs object
   useEffect(() => {
     if (cocktails) {
       const newCocktails = cocktails.map((item) => {
-        const { idDrink, strDrink, strGlass, strAlcoholic, strDrinkThumb } =
+        const { idDrink, strAlcoholic, strDrinkThumb, strGlass, strDrink } =
           item;
         return {
           id: idDrink,
           name: strDrink,
-          glass: strGlass,
+          img: strDrinkThumb,
           info: strAlcoholic,
-          image: strDrinkThumb,
+          glass: strGlass,
         };
       });
-      setModifiedCocktails(newCocktails);
+      setmodifiedCocktails(newCocktails);
     } else {
-      setModifiedCocktails([]);
+      setmodifiedCocktails([]);
     }
-  }, []);
-
-  // If user a search a cokctail that is not included
-
-  if(!cocktails){
-    return(
-      <Layout>
-        <h1>Sorry, we don't have a cocktail with this name</h1>
-      </Layout>
-    )
+  }, [cocktails]);
+  if (loading) {
+    return <SpinnerAnim />;
   }
-
+  if (error) {
+    return <p>{error.message}</p>;
+  }
+  if (!cocktails) {
+    return (
+      <Layout>
+        <h2>No Cocktail Found With THis Name</h2>
+      </Layout>
+    );
+  }
   return (
     <>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <div className="container text-center">
-          <div className="row d-flex justify-content-center">
-            <h1>Our CockTail List</h1>
-            {modifiedCocktails.map((item) => (
-              <div className="card mt-3 ms-3" style={{ width: "18rem" }}>
-                <img src={item.image} className="card-img-top" alt="..." />
+      <div className="container text-center home-container">
+        <div className="row d-flex justify-content-center">
+          {modifiedCocktails.map((item) => (
+            <div className="col-md-3 mt-3 homepage" key={item.id}>
+              <div className="card mt-3" style={{ width: "18rem" }}>
+                <img src={item.img} className="card-img-top" alt={item.name} />
                 <div className="card-body">
                   <h5 className="card-title">{item.name}</h5>
                   <h5 className="card-title">{item.glass}</h5>
@@ -64,10 +63,10 @@ const HomePage = () => {
                   </Link>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
     </>
   );
 };

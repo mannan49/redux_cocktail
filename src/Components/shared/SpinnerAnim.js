@@ -1,6 +1,6 @@
 import React from "react";
 
-const Spinner = () => {
+const SpinnerAnim = () => {
   return (
     <div>
       <div className="text-center">
@@ -33,4 +33,4 @@ const Spinner = () => {
   );
 };
 
-export default Spinner;
+export default SpinnerAnim;
